@@ -1,0 +1,8 @@
+Para mostrar o poder visual do Dart com Flutter, o exemplo abaixo foca em animações implícitas, efeitos de vidro (Glassmorphism) e transformações 3D.
+Partículas: Use o package particles_flutter para criar um fundo vivo atrás do cartão.
+Animações de Entrada: Envolva o cartão em um TweenAnimationBuilder para ele "surgir" com um efeito de escala.
+Sombras de Brilho: Adicione BoxShadow com cores vibrantes e alto blurRadius para simular iluminação neon.
+Matriz de Transformação (Matrix4): Permite rotacionar o elemento nos eixos X e Y em tempo real, criando profundidade 3D.
+Filtro de Camada (BackdropFilter): Essencial para o efeito Glassmorphism. Ele desfoca o que está atrás do widget, dando a sensação de vidro fosco.
+Interatividade (GestureDetector): O movimento do cartão é controlado pelo arraste do usuário, garantindo uma experiência dinâmica e não estática.
+Gradientes Dinâmicos: O uso de cores com baixa opacidade (withOpacity) cria um brilho neon sutil.
