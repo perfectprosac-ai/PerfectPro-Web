@@ -1,5 +1,5 @@
-﻿import 'dart:math' as math;
-
+﻿import 'elastic_service.dart';
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -205,10 +205,18 @@ class SobreNosPage extends StatelessWidget {
           title: Text('Sobre nós', style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurface)),
           actions: [
             IconButton(
-              tooltip: 'WhatsApp',
-              onPressed: _openWhatsApp,
-              icon: Icon(Icons.chat_rounded, color: Theme.of(context).colorScheme.primary),
-            ),
+  tooltip: 'WhatsApp',
+  onPressed: () {
+    // 1. Abre o WhatsApp
+    _openWhatsApp(); 
+    
+    // 2. Tenta enviar o log para o Elastic
+    ElasticService.enviarTeste();
+  },
+  // Trocamos cs.primary por este código mais completo para evitar o erro de "getter not defined"
+  icon: Icon(Icons.chat_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
+),
+
             IconButton(
               tooltip: 'E-mail SAC',
               onPressed: _openSacEmail,
