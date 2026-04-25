@@ -73,6 +73,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
   final GlobalKey _portfolioKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
   static const double _headerHeight = 76;
+  int _mobileNavIndex = 0;
 
   @override
   void initState() {
@@ -107,9 +108,59 @@ class _SiteHomePageState extends State<SiteHomePage> {
     );
   }
 
+  void _onMobileNavTap(int index) {
+    switch (index) {
+      case 0:
+        _scrollTo(_homeKey);
+      case 1:
+        _scrollTo(_solutionsKey);
+      case 2:
+        _scrollTo(_portfolioKey);
+      case 3:
+        Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(builder: (_) => SobreNosPage(onToggleTheme: widget.onToggleTheme)),
+        );
+        return;
+      case 4:
+        _scrollTo(_contactKey);
+    }
+    setState(() => _mobileNavIndex = index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isMobileNav = MediaQuery.sizeOf(context).width < 980;
     return Scaffold(
+      bottomNavigationBar: isMobileNav
+          ? NavigationBar(
+              selectedIndex: _mobileNavIndex,
+              height: 68,
+              onDestinationSelected: _onMobileNavTap,
+              destinations: const [
+                NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+                NavigationDestination(
+                  icon: Icon(Icons.widgets_outlined),
+                  selectedIcon: Icon(Icons.widgets_rounded),
+                  label: 'Solucoes',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.work_outline_rounded),
+                  selectedIcon: Icon(Icons.work_rounded),
+                  label: 'Portfolio',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.info_outline_rounded),
+                  selectedIcon: Icon(Icons.info_rounded),
+                  label: 'Sobre',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.mail_outline_rounded),
+                  selectedIcon: Icon(Icons.mail_rounded),
+                  label: 'Contato',
+                ),
+              ],
+            )
+          : null,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -118,7 +169,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: _headerHeight + 12),
+                SizedBox(height: isMobileNav ? 12 : _headerHeight + 12),
                 HeroSection(key: _homeKey, scrollListenable: _scrollPixels),
                 SectionCard(
                   key: _solutionsKey,
@@ -140,22 +191,23 @@ class _SiteHomePageState extends State<SiteHomePage> {
               ],
             ),
           ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SiteHeader(
-              height: _headerHeight,
-              onToggleTheme: widget.onToggleTheme,
-              onHome: () => _scrollTo(_homeKey),
-              onSolutions: () => _scrollTo(_solutionsKey),
-              onPortfolio: () => _scrollTo(_portfolioKey),
-              onAbout: () => Navigator.of(context).push<void>(
-                    MaterialPageRoute<void>(builder: (_) => SobreNosPage(onToggleTheme: widget.onToggleTheme)),
-                  ),
-              onContact: () => _scrollTo(_contactKey),
+          if (!isMobileNav)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SiteHeader(
+                height: _headerHeight,
+                onToggleTheme: widget.onToggleTheme,
+                onHome: () => _scrollTo(_homeKey),
+                onSolutions: () => _scrollTo(_solutionsKey),
+                onPortfolio: () => _scrollTo(_portfolioKey),
+                onAbout: () => Navigator.of(context).push<void>(
+                      MaterialPageRoute<void>(builder: (_) => SobreNosPage(onToggleTheme: widget.onToggleTheme)),
+                    ),
+                onContact: () => _scrollTo(_contactKey),
+              ),
             ),
-          ),
           if (kIsWeb)
             Positioned(
               left: 0,
