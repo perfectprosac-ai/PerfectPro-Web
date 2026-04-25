@@ -882,11 +882,12 @@ class SiteHeader extends StatelessWidget {
                 onPressed: _openSacEmail,
                 icon: Icon(Icons.mail_outline_rounded, color: cs.primary, size: 22),
               ),
-            IconButton(
-              tooltip: isDark ? 'Tema claro' : 'Tema escuro',
-              onPressed: onToggleTheme,
-              icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: cs.primary, size: 22),
-            ),
+            if (!isCompact)
+              IconButton(
+                tooltip: isDark ? 'Tema claro' : 'Tema escuro',
+                onPressed: onToggleTheme,
+                icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: cs.primary, size: 22),
+              ),
             if (!isCompact) const Spacer(),
             if (isCompact)
               PopupMenuButton<String>(
@@ -908,6 +909,8 @@ class SiteHeader extends StatelessWidget {
                       _openWhatsApp();
                     case 'email':
                       _openSacEmail();
+                    case 'theme':
+                      onToggleTheme();
                   }
                 },
                 itemBuilder: (context) => const [
@@ -917,6 +920,7 @@ class SiteHeader extends StatelessWidget {
                   PopupMenuItem(value: 'about', child: Text('Sobre nós')),
                   PopupMenuItem(value: 'contact', child: Text('Contato')),
                   PopupMenuDivider(),
+                  PopupMenuItem(value: 'theme', child: Text('Alternar tema')),
                   PopupMenuItem(value: 'whatsapp', child: Text('WhatsApp')),
                   PopupMenuItem(value: 'email', child: Text('E-mail SAC')),
                 ],
