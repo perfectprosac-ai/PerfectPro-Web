@@ -1,4 +1,6 @@
 ﻿import 'elastic_service.dart';
+import 'politica_page.dart';
+import 'web_cookie_consent_stub.dart' if (dart.library.html) 'web_cookie_consent_web.dart' as cookie_consent;
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +77,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
   @override
   void initState() {
     super.initState();
+    seo_meta.applyHomePageSeoMetaTags();
     _scrollController.addListener(_onScroll);
   }
 
@@ -132,7 +135,8 @@ class _SiteHomePageState extends State<SiteHomePage> {
                   title: 'Contato',
                   child: const ContactMotionBlock(),
                 ),
-                const SizedBox(height: 24),
+                _HomeComplianceFooter(onToggleTheme: widget.onToggleTheme),
+                SizedBox(height: kIsWeb ? 100 : 24),
               ],
             ),
           ),
@@ -152,17 +156,23 @@ class _SiteHomePageState extends State<SiteHomePage> {
               onContact: () => _scrollTo(_contactKey),
             ),
           ),
+          if (kIsWeb)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _WebCookieConsentBanner(onToggleTheme: widget.onToggleTheme),
+            ),
         ],
       ),
     );
   }
 }
 
-/// Página institucional com textos do material de referência do projeto.
-class SobreNosPage extends StatelessWidget {
+/// Página institucional: layout legível, blocos semânticos e SEO web (meta + título) via [seo_meta].
+class SobreNosPage extends StatefulWidget {
   const SobreNosPage({super.key, this.onToggleTheme});
 
-  /// Mesmo callback do início para alternar tema nesta rota.
   final VoidCallback? onToggleTheme;
 
   static const String _empresaTitulo = 'Codificando o Amanhã, Hoje.';
@@ -189,77 +199,266 @@ class SobreNosPage extends StatelessWidget {
       '• Suporte Full-Stack: Do design da UI à engenharia de back-end.';
 
   @override
+  State<SobreNosPage> createState() => _SobreNosPageState();
+}
+
+class _SobreNosPageState extends State<SobreNosPage> {
+  @override
+  void initState() {
+    super.initState();
+    seo_meta.applyAboutPageSeoMetaTags();
+  }
+
+  @override
+  void dispose() {
+    seo_meta.restoreGlobalSeoMetaTags();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Semantics(
-      label: 'Página Sobre nós da empresa',
+      label: 'Pagina institucional Sobre nos da PerfectPro',
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.96),
+          backgroundColor: cs.surface.withValues(alpha: 0.96),
           surfaceTintColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.primary),
+            icon: Icon(Icons.arrow_back, color: cs.primary),
             tooltip: 'Voltar ao início',
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Text('Sobre nós', style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurface)),
+          title: Text('Sobre nós', style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: cs.onSurface)),
           actions: [
             IconButton(
-  tooltip: 'WhatsApp',
-  onPressed: () {
-    // 1. Abre o WhatsApp
-    _openWhatsApp(); 
-    
-    // 2. Tenta enviar o log para o Elastic
-    ElasticService.enviarTeste();
-  },
-  // Trocamos cs.primary por este código mais completo para evitar o erro de "getter not defined"
-  icon: Icon(Icons.chat_rounded, color: Theme.of(context).colorScheme.primary, size: 22),
-),
-
+              tooltip: 'WhatsApp',
+              onPressed: () {
+                _openWhatsApp();
+                ElasticService.enviarTeste();
+              },
+              icon: Icon(Icons.chat_rounded, color: cs.primary, size: 22),
+            ),
             IconButton(
               tooltip: 'E-mail SAC',
               onPressed: _openSacEmail,
-              icon: Icon(Icons.mail_outline_rounded, color: Theme.of(context).colorScheme.primary),
+              icon: Icon(Icons.mail_outline_rounded, color: cs.primary),
             ),
-            if (onToggleTheme != null)
+            if (widget.onToggleTheme != null)
               IconButton(
                 tooltip: Theme.of(context).brightness == Brightness.dark ? 'Tema claro' : 'Tema escuro',
-                onPressed: onToggleTheme,
+                onPressed: widget.onToggleTheme,
                 icon: Icon(
                   Theme.of(context).brightness == Brightness.dark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: cs.primary,
                 ),
               ),
           ],
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Transformação digital e robustez do código',
-                    style: GoogleFonts.inter(
-                      fontSize: 15,
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
-                      height: 1.4,
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 720),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            'PerfectPro',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              letterSpacing: 0.6,
+                              fontWeight: FontWeight.w600,
+                              color: cs.primary,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            'Sobre nós',
+                            style: GoogleFonts.inter(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                              height: 1.15,
+                              color: cs.onSurface,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Software house · Flutter · Java · Mobile, Web e Desktop',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: cs.onSurface.withValues(alpha: 0.72),
+                            height: 1.35,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Transformação digital e robustez do código. Conteúdo pensado para clareza institucional e boa leitura em qualquer dispositivo.',
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            color: cs.onSurface.withValues(alpha: 0.78),
+                            height: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        Divider(height: 1, color: cs.outline.withValues(alpha: 0.35)),
+                        const SizedBox(height: 22),
+                        _SobreNosSection(
+                          icon: Icons.flag_rounded,
+                          title: SobreNosPage._empresaTitulo,
+                          body: SobreNosPage._empresaCorpo,
+                        ),
+                        const SizedBox(height: 18),
+                        _SobreNosSection(
+                          icon: Icons.smartphone_rounded,
+                          title: SobreNosPage._appsTitulo,
+                          body: SobreNosPage._appsCorpo,
+                        ),
+                        const SizedBox(height: 18),
+                        _SobreNosSection(
+                          icon: Icons.language_rounded,
+                          title: SobreNosPage._webTitulo,
+                          body: SobreNosPage._webCorpo,
+                        ),
+                        const SizedBox(height: 18),
+                        _SobreNosSection(
+                          icon: Icons.laptop_windows_rounded,
+                          title: SobreNosPage._desktopTitulo,
+                          body: SobreNosPage._desktopCorpo,
+                        ),
+                        const SizedBox(height: 18),
+                        _SobreNosSection(
+                          icon: Icons.verified_rounded,
+                          title: SobreNosPage._porQueTitulo,
+                          body: SobreNosPage._porQueCorpo,
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const SectionText(title: _empresaTitulo, body: _empresaCorpo),
-                  const SizedBox(height: 22),
-                  const SectionText(title: _appsTitulo, body: _appsCorpo),
-                  const SizedBox(height: 22),
-                  const SectionText(title: _webTitulo, body: _webCorpo),
-                  const SizedBox(height: 22),
-                  const SectionText(title: _desktopTitulo, body: _desktopCorpo),
-                  const SizedBox(height: 22),
-                  const SectionText(title: _porQueTitulo, body: _porQueCorpo),
+                ),
+              ),
+            ),
+            const _SobreNosLegalFooter(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SobreNosSection extends StatelessWidget {
+  const _SobreNosSection({required this.icon, required this.title, required this.body});
+
+  final IconData icon;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Semantics(
+      container: true,
+      label: title,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cs.surfaceContainerHighest.withValues(alpha: 0.55),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: cs.outline.withValues(alpha: 0.45)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 18, 18, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, color: cs.primary, size: 24),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: GoogleFonts.inter(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        height: 1.25,
+                        color: cs.primary,
+                      ),
+                    ),
+                  ),
                 ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                body,
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  height: 1.55,
+                  color: cs.onSurface.withValues(alpha: 0.86),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SobreNosLegalFooter extends StatelessWidget {
+  const _SobreNosLegalFooter();
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final year = DateTime.now().year;
+    return Semantics(
+      label: 'Rodape legal e direitos autorais',
+      child: ColoredBox(
+        color: cs.surfaceContainerHighest.withValues(alpha: 0.92),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 18, 24, 20),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 720),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '© $year PerfectPro. Todos os direitos reservados.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: cs.onSurface.withValues(alpha: 0.88),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Marca, logotipos, textos e ilustrações deste site são de uso exclusivo da PerfectPro, salvo indicação em contrário. '
+                      'É proibida a reprodução total ou parcial para fins comerciais sem autorização prévia por escrito.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        height: 1.45,
+                        color: cs.onSurface.withValues(alpha: 0.65),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -269,29 +468,326 @@ class SobreNosPage extends StatelessWidget {
   }
 }
 
-Future<void> _openWhatsApp() async {
-  final uri = Uri.parse('https://wa.me/$kWhatsAppDigits');
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+Widget _policyLinkButton(String label, String url, {required double fontSize}) {
+  return TextButton(
+    style: TextButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      alignment: Alignment.center,
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ),
+    onPressed: () => launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: kIsWeb ? '_blank' : null,
+    ),
+    child: Text(label, style: GoogleFonts.inter(fontSize: fontSize), textAlign: TextAlign.center),
+  );
+}
+
+/// Rodapé da home: página própria PerfectPro + referências oficiais Google (medição).
+class _HomeComplianceFooter extends StatelessWidget {
+  const _HomeComplianceFooter({required this.onToggleTheme});
+
+  final VoidCallback onToggleTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.hasBoundedWidth && constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+        final padH = w < 400 ? 12.0 : 24.0;
+        final innerPad = w < 400 ? 14.0 : 18.0;
+        final maxCard = (w < 720 ? w - padH * 2 : 720.0).clamp(200.0, 720.0);
+        final stackLinks = w < 440;
+        return Semantics(
+          label: 'Privacidade, dados, cookies e termos PerfectPro',
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(padH, 20, padH, 8),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxCard.clamp(0, 720)),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: cs.surfaceContainerHighest.withValues(alpha: 0.45),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: cs.outline.withValues(alpha: 0.4)),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(innerPad, 16, innerPad, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Privacidade, dados e cookies',
+                          style: GoogleFonts.inter(
+                            fontSize: w < 360 ? 13 : 14,
+                            fontWeight: FontWeight.w700,
+                            color: cs.primary,
+                          ),
+                          textAlign: w < 480 ? TextAlign.center : TextAlign.start,
+                        ),
+                        SizedBox(height: w < 360 ? 6 : 8),
+                        Text(
+                          'Leia a política completa da PerfectPro (privacidade, dados, cookies e termos). '
+                          'Para serviços Google (ex.: Analytics), aplicam-se também as políticas oficiais do Google.',
+                          style: GoogleFonts.inter(
+                            fontSize: w < 360 ? 12 : 12.5,
+                            height: 1.5,
+                            color: cs.onSurface.withValues(alpha: 0.78),
+                          ),
+                          textAlign: w < 480 ? TextAlign.center : TextAlign.start,
+                        ),
+                        SizedBox(height: w < 360 ? 10 : 12),
+                        SizedBox(
+                          width: stackLinks ? double.infinity : null,
+                          child: FilledButton.tonalIcon(
+                            onPressed: () {
+                              Navigator.of(context).push<void>(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => PoliticaPrivacidadePage(onToggleTheme: onToggleTheme),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.policy_outlined, size: 20),
+                            label: Text(
+                              w < 340 ? 'Política completa' : 'Ver política completa',
+                              style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: w < 360 ? 13 : 14),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: w < 360 ? 10 : 12),
+                        if (stackLinks)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              _policyLinkButton(
+                                'Privacidade Google',
+                                'https://policies.google.com/privacy',
+                                fontSize: w < 360 ? 12 : 12.5,
+                              ),
+                              const SizedBox(height: 4),
+                              _policyLinkButton(
+                                'Cookies Google',
+                                'https://policies.google.com/technologies/cookies',
+                                fontSize: w < 360 ? 12 : 12.5,
+                              ),
+                              const SizedBox(height: 4),
+                              _policyLinkButton(
+                                'Termos Google',
+                                'https://policies.google.com/terms',
+                                fontSize: w < 360 ? 12 : 12.5,
+                              ),
+                            ],
+                          )
+                        else
+                          Wrap(
+                            alignment: w < 520 ? WrapAlignment.center : WrapAlignment.start,
+                            spacing: 4,
+                            runSpacing: 6,
+                            children: [
+                              TextButton(
+                                onPressed: () => launchUrl(
+                                  Uri.parse('https://policies.google.com/privacy'),
+                                  mode: LaunchMode.externalApplication,
+                                  webOnlyWindowName: kIsWeb ? '_blank' : null,
+                                ),
+                                child: Text('Privacidade Google', style: GoogleFonts.inter(fontSize: 12.5)),
+                              ),
+                              TextButton(
+                                onPressed: () => launchUrl(
+                                  Uri.parse('https://policies.google.com/technologies/cookies'),
+                                  mode: LaunchMode.externalApplication,
+                                  webOnlyWindowName: kIsWeb ? '_blank' : null,
+                                ),
+                                child: Text('Cookies Google', style: GoogleFonts.inter(fontSize: 12.5)),
+                              ),
+                              TextButton(
+                                onPressed: () => launchUrl(
+                                  Uri.parse('https://policies.google.com/terms'),
+                                  mode: LaunchMode.externalApplication,
+                                  webOnlyWindowName: kIsWeb ? '_blank' : null,
+                                ),
+                                child: Text('Termos Google', style: GoogleFonts.inter(fontSize: 12.5)),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
+/// Barra inferior (só web): Consent Mode alinhado ao `index.html`, sem alterar hero nem secções.
+class _WebCookieConsentBanner extends StatefulWidget {
+  const _WebCookieConsentBanner({required this.onToggleTheme});
+
+  final VoidCallback onToggleTheme;
+
+  @override
+  State<_WebCookieConsentBanner> createState() => _WebCookieConsentBannerState();
+}
+
+class _WebCookieConsentBannerState extends State<_WebCookieConsentBanner> {
+  late bool _visible;
+
+  @override
+  void initState() {
+    super.initState();
+    _visible = kIsWeb && !cookie_consent.isCookieChoiceStored();
+  }
+
+  void _snackReload() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Preferência gravada. Recarregue a página (F5 ou ícone atualizar) para aplicar a medição.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_visible) return const SizedBox.shrink();
+    final cs = Theme.of(context).colorScheme;
+    final w = MediaQuery.sizeOf(context).width;
+    final narrow = w < 520;
+    return Material(
+      elevation: 12,
+      color: cs.surface.withValues(alpha: 0.97),
+      shadowColor: Colors.black45,
+      child: SafeArea(
+        top: false,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: cs.primary.withValues(alpha: 0.45), width: 1)),
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(narrow ? 12 : 16, 10, narrow ? 12 : 16, 10),
+            child: narrow
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Cookies de medição (Google). Pode aceitar, recusar ou ler a política.',
+                        style: GoogleFonts.inter(fontSize: 12.5, height: 1.35, color: cs.onSurface.withValues(alpha: 0.88)),
+                      ),
+                      const SizedBox(height: 10),
+                      _cookieActions(context, cs, narrow: true),
+                    ],
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Utilizamos cookies de medição (Google Analytics) conforme a nossa política e o Consent Mode.',
+                          style: GoogleFonts.inter(fontSize: 13, height: 1.35, color: cs.onSurface.withValues(alpha: 0.88)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      _cookieActions(context, cs, narrow: false),
+                    ],
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _cookieActions(BuildContext context, ColorScheme cs, {required bool narrow}) {
+    Widget row = Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      alignment: narrow ? WrapAlignment.start : WrapAlignment.end,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => PoliticaPrivacidadePage(onToggleTheme: widget.onToggleTheme),
+              ),
+            );
+          },
+          child: Text('Política', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+        ),
+        TextButton(
+          onPressed: () {
+            cookie_consent.denyAnalyticsMeasurementConsent();
+            setState(() => _visible = false);
+            _snackReload();
+          },
+          child: Text('Recusar', style: GoogleFonts.inter(fontSize: 13)),
+        ),
+        FilledButton(
+          onPressed: () {
+            cookie_consent.grantAnalyticsMeasurementConsent();
+            setState(() => _visible = false);
+            _snackReload();
+          },
+          child: Text('Aceitar', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+        ),
+      ],
+    );
+    return row;
+  }
+}
+
+Future<void> _openWhatsApp({String? prefilledBody}) async {
+  final uri = prefilledBody == null || prefilledBody.isEmpty
+      ? Uri.parse('https://wa.me/$kWhatsAppDigits')
+      : Uri.parse('https://wa.me/$kWhatsAppDigits').replace(
+          queryParameters: <String, String>{'text': prefilledBody},
+        );
+  await launchUrl(
+    uri,
+    mode: LaunchMode.externalApplication,
+    webOnlyWindowName: kIsWeb ? '_blank' : null,
+  );
+}
+
 Future<void> _openSacEmail() async {
+  if (kIsWeb) {
+    final gmailCompose = Uri.https('mail.google.com', '/mail/', <String, String>{
+      'view': 'cm',
+      'fs': '1',
+      'to': kEmailSac,
+      'su': 'Contato PerfectPro',
+    });
+    await launchUrl(
+      gmailCompose,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: '_blank',
+    );
+    return;
+  }
   final uri = Uri(
     scheme: 'mailto',
     path: kEmailSac,
-    queryParameters: {'subject': 'Contato PerfectPro'},
+    queryParameters: const {'subject': 'Contato PerfectPro'},
   );
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri);
-  }
+  await launchUrl(uri, mode: LaunchMode.platformDefault);
 }
 
 Future<void> _openSiteUrl() async {
   final uri = Uri.parse('https://perfectpro.app/');
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
+  await launchUrl(
+    uri,
+    mode: LaunchMode.externalApplication,
+    webOnlyWindowName: kIsWeb ? '_blank' : null,
+  );
 }
 
 class SiteHeader extends StatelessWidget {
@@ -482,31 +978,56 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (staticDecor)
-                          ShaderMask(
-                            blendMode: BlendMode.srcIn,
-                            shaderCallback: (bounds) {
-                              final angle = motion ? _ambient.value * math.pi * 1.25 : 0.0;
-                              return LinearGradient(
-                                colors: [
-                                  cs.onSurface.withValues(alpha: 0.55),
-                                  cs.primary,
-                                  cs.onSurface.withValues(alpha: 0.85),
-                                ],
-                                stops: const [0.15, 0.5, 0.85],
-                                transform: GradientRotation(angle),
-                              ).createShader(bounds);
-                            },
-                            child: const Text(
-                              'Inovacao em Flutter, Java e SDKs',
-                              style: TextStyle(fontSize: 38, fontWeight: FontWeight.w800, height: 1.12, color: Colors.white),
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            'PerfectPro',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w700,
+                              color: cs.primary,
                             ),
-                          )
-                        else
-                          Text(
-                            'Inovacao em Flutter, Java e SDKs',
-                            style: TextStyle(fontSize: 38, fontWeight: FontWeight.w800, height: 1.12, color: cs.onSurface),
                           ),
+                        ),
+                        const SizedBox(height: 10),
+                        Semantics(
+                          header: true,
+                          label: 'Inovacao em Flutter, Java e SDKs',
+                          child: staticDecor
+                              ? ShaderMask(
+                                  blendMode: BlendMode.srcIn,
+                                  shaderCallback: (bounds) {
+                                    final angle = motion ? _ambient.value * math.pi * 1.25 : 0.0;
+                                    return LinearGradient(
+                                      colors: [
+                                        cs.onSurface.withValues(alpha: 0.55),
+                                        cs.primary,
+                                        cs.onSurface.withValues(alpha: 0.85),
+                                      ],
+                                      stops: const [0.15, 0.5, 0.85],
+                                      transform: GradientRotation(angle),
+                                    ).createShader(bounds);
+                                  },
+                                  child: const Text(
+                                    'Inovacao em Flutter, Java e SDKs',
+                                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.w800, height: 1.12, color: Colors.white),
+                                  ),
+                                )
+                              : Text(
+                                  'Inovacao em Flutter, Java e SDKs',
+                                  style: TextStyle(fontSize: 38, fontWeight: FontWeight.w800, height: 1.12, color: cs.onSurface),
+                                ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Software house: aplicativos mobile, sites rapidos (Core Web Vitals), desktop Windows e integracao de SDKs — codigo limpo, seguranca e SEO.',
+                          style: GoogleFonts.inter(
+                            fontSize: 13.5,
+                            height: 1.45,
+                            color: cs.onSurface.withValues(alpha: 0.72),
+                          ),
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'Desenvolvendo o futuro mobile e web com codigo limpo',
@@ -730,7 +1251,7 @@ class _PortfolioMotionBlockState extends State<PortfolioMotionBlock> with Single
   }
 }
 
-/// Contato: entrada + CTA com pulse e SnackBar de demonstração.
+/// Contato: entrada + CTA com pulse; botão principal abre WhatsApp com texto inicial.
 class ContactMotionBlock extends StatefulWidget {
   const ContactMotionBlock({super.key});
 
@@ -815,16 +1336,12 @@ class _ContactMotionBlockState extends State<ContactMotionBlock> with TickerProv
                 foregroundColor: cs.onPrimary,
                 padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
               ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Demonstracao: mensagem recebida. Em producao, isto abriria o canal de contato.'),
-                    behavior: SnackBarBehavior.floating,
+              onPressed: () => _openWhatsApp(
+                    prefilledBody:
+                        'Olá! Gostaria de falar com a PerfectPro sobre um projeto.\n\n',
                   ),
-                );
-              },
               icon: const Icon(Icons.send_rounded),
-              label: const Text('Enviar mensagem (demo)'),
+              label: const Text('Enviar mensagem (WhatsApp)'),
             ),
           ),
         ),
@@ -890,45 +1407,69 @@ class DeviceFrame extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final codeStyle = GoogleFonts.jetBrainsMono(textStyle: TextStyle(color: cs.primary, fontSize: 11));
-    return Container(
-      width: width,
-      height: height,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF181818) : const Color(0xFFF2F4F5),
-        borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: cs.primary.withValues(alpha: 0.45)),
-      ),
-      child: Stack(
-        children: [
-          if (withDesktopBar)
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
-                child: SizedBox(height: 28, child: ColoredBox(color: cs.surfaceContainerHigh)),
-              ),
-            ),
-          Positioned(
-            left: imageLeft,
-            top: imageTop,
-            width: imageWidth,
-            height: imageHeight,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                imageAsset,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    ColoredBox(color: cs.surfaceContainerHigh),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxW = constraints.hasBoundedWidth && constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+        final safeW = math.max(maxW, 1.0);
+        final scale = math.min(1.0, safeW / width);
+        return SizedBox(
+          width: width * scale,
+          height: height * scale,
+          child: FittedBox(
+            fit: BoxFit.fill,
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF181818) : const Color(0xFFF2F4F5),
+                  borderRadius: BorderRadius.circular(radius),
+                  border: Border.all(color: cs.primary.withValues(alpha: 0.45)),
+                ),
+                child: Stack(
+                  clipBehavior: Clip.hardEdge,
+                  children: [
+                    if (withDesktopBar)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+                          child: SizedBox(height: 28, child: ColoredBox(color: cs.surfaceContainerHigh)),
+                        ),
+                      ),
+                    Positioned(
+                      left: imageLeft,
+                      top: imageTop,
+                      width: imageWidth,
+                      height: imageHeight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: ColoredBox(
+                          color: isDark ? const Color(0xFF0C0C0C) : const Color(0xFFE4E7EA),
+                          child: Image.asset(
+                            imageAsset,
+                            fit: BoxFit.contain,
+                            alignment: Alignment.topCenter,
+                            errorBuilder: (context, error, stackTrace) =>
+                                ColoredBox(color: cs.surfaceContainerHigh),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(left: 10, bottom: 8, child: Text(title, style: codeStyle)),
+                  ],
+                ),
               ),
             ),
           ),
-          Positioned(left: 10, bottom: 8, child: Text(title, style: codeStyle)),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -955,9 +1496,15 @@ class SectionCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.onSurface),
+              Semantics(
+                header: true,
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                ),
               ),
               const SizedBox(height: 14),
               child,

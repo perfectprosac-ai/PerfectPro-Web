@@ -10,7 +10,7 @@
  * Teste (outro terminal):
  *   curl -X POST http://127.0.0.1:3000/enviar-dados -H "Content-Type: application/json" -d "{\"msg\":\"teste\"}"
  */
-
+console.log("=== INICIANDO SCRIPT DE INGESTÃO ===");
 const express = require('express');
 const { Client } = require('@elastic/elasticsearch');
 
@@ -50,8 +50,9 @@ app.post('/enviar-dados', async (req, res) => {
   }
 });
 
-const port = Number(process.env.PORT) || 3000;
-app.listen(port, () => {
-  console.log(`Servidor http://127.0.0.1:${port}`);
-  console.log('POST /enviar-dados | GET /health');
+const port = process.env.PORT || 10000; 
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`✅ Servidor rodando na porta ${port}`);
+  console.log(`🔗 Health Check: /health`);
 });
