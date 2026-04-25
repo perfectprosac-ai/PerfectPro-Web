@@ -785,8 +785,8 @@ Future<void> _openSiteUrl() async {
   final uri = Uri.parse('https://perfectpro-webpageoficial.onrender.com/');
   await launchUrl(
     uri,
-    mode: LaunchMode.externalApplication,
-    webOnlyWindowName: kIsWeb ? '_blank' : null,
+    mode: LaunchMode.platformDefault,
+    webOnlyWindowName: kIsWeb ? '_self' : null,
   );
 }
 
