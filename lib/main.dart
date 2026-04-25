@@ -837,17 +837,38 @@ class SiteHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            TextButton(
-              onPressed: _openSiteUrl,
-              child: Text(
-                'PerfectPro',
-                style: TextStyle(
-                  color: cs.primary,
-                  fontSize: isCompact ? 18 : 20,
-                  fontWeight: FontWeight.w800,
+            if (isCompact)
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 6)),
+                    onPressed: _openSiteUrl,
+                    child: Text(
+                      'PerfectPro',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: cs.primary,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else
+              TextButton(
+                onPressed: _openSiteUrl,
+                child: Text(
+                  'PerfectPro',
+                  style: TextStyle(
+                    color: cs.primary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
-            ),
             if (!isCompact) const SizedBox(width: 4),
             if (!isCompact)
               IconButton(
@@ -866,7 +887,7 @@ class SiteHeader extends StatelessWidget {
               onPressed: onToggleTheme,
               icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: cs.primary, size: 22),
             ),
-            const Spacer(),
+            if (!isCompact) const Spacer(),
             if (isCompact)
               PopupMenuButton<String>(
                 tooltip: 'Abrir menu',
