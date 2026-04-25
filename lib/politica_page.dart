@@ -101,7 +101,7 @@ class _PoliticaPrivacidadePageState extends State<PoliticaPrivacidadePage> {
                         title: '1. Quem somos',
                         body:
                             'O presente site é operado pela PerfectPro (“nós”, “nossa”). Somos uma software house focada em desenvolvimento de software (mobile, web e desktop), '
-                            'consultoria técnica e conteúdo institucional. O domínio de referência do projeto é perfectpro.app (ajuste se o seu domínio público for outro).',
+                            'consultoria técnica e conteúdo institucional. O domínio de referência do projeto é perfectpro-webpageoficial.onrender.com.',
                       ),
                       _PoliticaSection(
                         title: '2. Que dados podemos recolher',

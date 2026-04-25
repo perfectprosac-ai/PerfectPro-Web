@@ -71,7 +71,7 @@ Registados em `pubspec.yaml` (raiz do app e pastas):
 | Contato | Chips telefone/e-mail; botão “Enviar mensagem (WhatsApp)” abre `wa.me` com texto pré-preenchido |
 | WhatsApp | `https://wa.me/<kWhatsAppDigits>`; opcional `?text=` para mensagem inicial |
 | E-mail | **Web:** composição Gmail (`mail.google.com`…). **Nativo:** `mailto:` com assunto “Contato PerfectPro” |
-| Site externo | Link `https://perfectpro.app/` no nome da marca (conforme implementação atual) |
+| Site externo | Link `https://perfectpro-webpageoficial.onrender.com/` no nome da marca |
 | Acessibilidade | `Semantics` em blocos principais; animações reduzidas quando o SO pede |
 
 ## 8. Constantes de contacto (código)
