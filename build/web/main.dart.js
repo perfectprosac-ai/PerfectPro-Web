@@ -70992,11 +70992,18 @@ A.aeQ.prototype={
 $0(){return this.a.d=!1},
 $S:0}
 A.Ig.prototype={
-J(a){var s=this,r=null,q=A.W(a).ax,p=A.W(a).ax.a===B.S,o=A.bG(a,B.bB,t.w).w,n=A.W(a).fx.bl(0.94),m=q.b,l=m.bl(p?0.22:0.35),k=A.ex(A.alN("IMAGENS_APP/PerfectPro_Logo_Transparente.png",B.a_,r,r,new A.a5i(q),B.k8),34,34),j=A.jG(A.bk("PerfectPro",A.fh(r,r,m,r,r,r,r,r,r,r,r,20,r,r,B.b7,r,r,!0,r,r,r,r,r,r,r,r),r),A.aDD(),r),i=A.i_(r,r,r,A.es(B.ip,m,r,22),r,r,A.aqn(),r,r,r,"WhatsApp"),h=A.i_(r,r,r,A.es(B.lA,m,r,22),r,r,A.ajA(),r,r,r,"E-mail SAC"),g=p?"Tema claro":"Tema escuro",f=t.p
-g=A.c([k,B.KO,j,B.KN,i,h,A.i_(r,r,r,A.es(p?B.ir:B.iq,m,r,22),r,r,s.d,r,r,r,g),B.L5],f)
-if(o.a.a<980)g.push(new A.pR(new A.a5j(),new A.a5k(s),"Abrir menu",A.es(B.C3,m,r,24),r,t.iX))
-else g.push(new A.pa(1,B.lm,A.Ie(A.nv(A.c([new A.lk("Home",s.e,r),new A.lk("Solucoes (App/Web)",s.f,r),new A.lk("Portfolio",s.r,r),new A.lk("Sobre n\xf3s",s.w,r),new A.lk("Contato",s.x,r)],f),B.aD,B.O,B.bO,0),r,r,B.aw),r))
-return A.bt(r,r,A.u2(A.nv(g,B.aD,B.O,B.bO,0),B.w,new A.cO(n,r,new A.cy(B.q,B.q,new A.bi(l,1,B.v,-1),B.q),r,r,r,B.am),s.c,r,B.ld,r),!1,r,r,!1,r,r,r,r,r,"Cabecalho fixo com navegacao principal",r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r)}}
+J(a){var s,r=this,q=null,p=A.W(a).ax,o=A.W(a).ax.a===B.S,n=A.bG(a,B.bB,t.w).w.a.a<980,m=A.W(a).fx.bl(0.94),l=p.b,k=l.bl(o?0.22:0.35),j=A.ex(A.alN("IMAGENS_APP/PerfectPro_Logo_Transparente.png",B.a_,q,q,new A.a5i(p),B.k8),34,34),i=t.p
+j=A.c([j,B.KO,A.jG(A.bk("PerfectPro",A.fh(q,q,l,q,q,q,q,q,q,q,q,n?18:20,q,q,B.b7,q,q,!0,q,q,q,q,q,q,q,q),q),A.aDD(),q)],i)
+s=!n
+if(s)j.push(B.KN)
+if(s)j.push(A.i_(q,q,q,A.es(B.ip,l,q,22),q,q,A.aqn(),q,q,q,"WhatsApp"))
+if(s)j.push(A.i_(q,q,q,A.es(B.lA,l,q,22),q,q,A.ajA(),q,q,q,"E-mail SAC"))
+s=o?"Tema claro":"Tema escuro"
+j.push(A.i_(q,q,q,A.es(o?B.ir:B.iq,l,q,22),q,q,r.d,q,q,q,s))
+j.push(B.L5)
+if(n)j.push(new A.pR(new A.a5j(),new A.a5k(r),"Abrir menu",A.es(B.C3,l,q,24),q,t.iX))
+else j.push(new A.pa(1,B.lm,A.Ie(A.nv(A.c([new A.lk("Home",r.e,q),new A.lk("Solucoes (App/Web)",r.f,q),new A.lk("Portfolio",r.r,q),new A.lk("Sobre n\xf3s",r.w,q),new A.lk("Contato",r.x,q)],i),B.aD,B.O,B.bO,0),q,q,B.aw),q))
+return A.bt(q,q,A.u2(A.nv(j,B.aD,B.O,B.bO,0),B.w,new A.cO(m,q,new A.cy(B.q,B.q,new A.bi(k,1,B.v,-1),B.q),q,q,q,B.am),r.c,q,B.ld,q),!1,q,q,!1,q,q,q,q,q,"Cabecalho fixo com navegacao principal",q,q,q,q,q,q,q,q,q,q,q,q,q,q,q,q)}}
 A.a5i.prototype={
 $3(a,b,c){return A.es(B.BY,this.a.b,null,24)},
 $S:456}

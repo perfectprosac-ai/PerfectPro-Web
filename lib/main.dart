@@ -843,22 +843,24 @@ class SiteHeader extends StatelessWidget {
                 'PerfectPro',
                 style: TextStyle(
                   color: cs.primary,
-                  fontSize: 20,
+                  fontSize: isCompact ? 18 : 20,
                   fontWeight: FontWeight.w800,
                 ),
               ),
             ),
-            const SizedBox(width: 4),
-            IconButton(
-              tooltip: 'WhatsApp',
-              onPressed: _openWhatsApp,
-              icon: Icon(Icons.chat_rounded, color: cs.primary, size: 22),
-            ),
-            IconButton(
-              tooltip: 'E-mail SAC',
-              onPressed: _openSacEmail,
-              icon: Icon(Icons.mail_outline_rounded, color: cs.primary, size: 22),
-            ),
+            if (!isCompact) const SizedBox(width: 4),
+            if (!isCompact)
+              IconButton(
+                tooltip: 'WhatsApp',
+                onPressed: _openWhatsApp,
+                icon: Icon(Icons.chat_rounded, color: cs.primary, size: 22),
+              ),
+            if (!isCompact)
+              IconButton(
+                tooltip: 'E-mail SAC',
+                onPressed: _openSacEmail,
+                icon: Icon(Icons.mail_outline_rounded, color: cs.primary, size: 22),
+              ),
             IconButton(
               tooltip: isDark ? 'Tema claro' : 'Tema escuro',
               onPressed: onToggleTheme,
