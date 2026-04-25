@@ -814,6 +814,7 @@ class SiteHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isCompact = MediaQuery.sizeOf(context).width < 980;
     return Semantics(
       label: 'Cabecalho fixo com navegacao principal',
       child: Container(
@@ -864,20 +865,54 @@ class SiteHeader extends StatelessWidget {
               icon: Icon(isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded, color: cs.primary, size: 22),
             ),
             const Spacer(),
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _HeaderBtn(label: 'Home', onTap: onHome),
-                    _HeaderBtn(label: 'Solucoes (App/Web)', onTap: onSolutions),
-                    _HeaderBtn(label: 'Portfolio', onTap: onPortfolio),
-                    _HeaderBtn(label: 'Sobre nós', onTap: onAbout),
-                    _HeaderBtn(label: 'Contato', onTap: onContact),
-                  ],
+            if (isCompact)
+              PopupMenuButton<String>(
+                tooltip: 'Abrir menu',
+                icon: Icon(Icons.menu_rounded, color: cs.primary, size: 24),
+                onSelected: (value) {
+                  switch (value) {
+                    case 'home':
+                      onHome();
+                    case 'solutions':
+                      onSolutions();
+                    case 'portfolio':
+                      onPortfolio();
+                    case 'about':
+                      onAbout();
+                    case 'contact':
+                      onContact();
+                    case 'whatsapp':
+                      _openWhatsApp();
+                    case 'email':
+                      _openSacEmail();
+                  }
+                },
+                itemBuilder: (context) => const [
+                  PopupMenuItem(value: 'home', child: Text('Home')),
+                  PopupMenuItem(value: 'solutions', child: Text('Solucoes (App/Web)')),
+                  PopupMenuItem(value: 'portfolio', child: Text('Portfolio')),
+                  PopupMenuItem(value: 'about', child: Text('Sobre nós')),
+                  PopupMenuItem(value: 'contact', child: Text('Contato')),
+                  PopupMenuDivider(),
+                  PopupMenuItem(value: 'whatsapp', child: Text('WhatsApp')),
+                  PopupMenuItem(value: 'email', child: Text('E-mail SAC')),
+                ],
+              )
+            else
+              Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _HeaderBtn(label: 'Home', onTap: onHome),
+                      _HeaderBtn(label: 'Solucoes (App/Web)', onTap: onSolutions),
+                      _HeaderBtn(label: 'Portfolio', onTap: onPortfolio),
+                      _HeaderBtn(label: 'Sobre nós', onTap: onAbout),
+                      _HeaderBtn(label: 'Contato', onTap: onContact),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
@@ -1113,8 +1148,6 @@ class _AnimatedSolutionsSectionContentState extends State<AnimatedSolutionsSecti
                     children: [
                       _floatedDevice(0, const DeviceFrame(title: 'Android 14', width: 190, height: 390, radius: 34, imageAsset: 'IMAGENS_APP/Screenshot_20260423-120800.jpg', imageLeft: 20, imageTop: 22, imageWidth: 150, imageHeight: 342)),
                       _floatedDevice(1, const DeviceFrame(title: 'iPhone 15 Pro', width: 190, height: 390, radius: 38, imageAsset: 'IMAGENS_APP/Screenshot_20260423-120808.jpg', imageLeft: 18, imageTop: 22, imageWidth: 154, imageHeight: 342)),
-                      _floatedDevice(2, const DeviceFrame(title: 'iPad Pro', width: 330, height: 250, radius: 24, imageAsset: 'IMAGENS_APP/Screenshot_20260423-120855.jpg', imageLeft: 20, imageTop: 20, imageWidth: 290, imageHeight: 206)),
-                      _floatedDevice(3, const DeviceFrame(title: 'MacBook', width: 430, height: 270, radius: 18, imageAsset: 'IMAGENS_APP/Screenshot_20260423-120907.jpg', imageLeft: 20, imageTop: 36, imageWidth: 390, imageHeight: 210, withDesktopBar: true)),
                     ],
                   ),
                 );
