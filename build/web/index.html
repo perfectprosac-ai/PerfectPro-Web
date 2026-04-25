@@ -46,6 +46,8 @@
 
   <title>Codificando o Amanha, Hoje | PerfectPro</title>
   <link rel="manifest" href="manifest.json">
+  <!-- Descobre o bootstrap mais cedo (não bloqueia parsing; ajuda o browser a planear a rede) -->
+  <link rel="preload" href="flutter_bootstrap.js" as="script">
 </head>
 <body>
   <!--
@@ -77,10 +79,41 @@
       });
     })();
   </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- GA: só carrega o script externo se o utilizador já aceitou medição (localStorage), após load + idle — menos concorrência com Flutter e ~0 bytes se recusou. Após aceitar na barra, recarregar a página (como já indicado na app). -->
   <script>
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
+    (function () {
+      function analyticsGranted() {
+        try {
+          return localStorage.getItem('pp_cookie_consent') === 'granted';
+        } catch (e) {
+          return false;
+        }
+      }
+      function injectGtag() {
+        if (window.__ppGtagInjected) return;
+        window.__ppGtagInjected = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+        s.onload = function () {
+          try {
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+          } catch (e) {}
+        };
+        document.head.appendChild(s);
+      }
+      function scheduleInject() {
+        if (!analyticsGranted()) return;
+        var run = function () { injectGtag(); };
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(run, { timeout: 4000 });
+        } else {
+          setTimeout(run, 2000);
+        }
+      }
+      window.addEventListener('load', scheduleInject);
+    })();
   </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>

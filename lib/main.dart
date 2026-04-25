@@ -1423,48 +1423,57 @@ class DeviceFrame extends StatelessWidget {
             child: SizedBox(
               width: width,
               height: height,
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF181818) : const Color(0xFFF2F4F5),
-                  borderRadius: BorderRadius.circular(radius),
-                  border: Border.all(color: cs.primary.withValues(alpha: 0.45)),
-                ),
-                child: Stack(
-                  clipBehavior: Clip.hardEdge,
-                  children: [
-                    if (withDesktopBar)
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
-                          child: SizedBox(height: 28, child: ColoredBox(color: cs.surfaceContainerHigh)),
-                        ),
-                      ),
-                    Positioned(
-                      left: imageLeft,
-                      top: imageTop,
-                      width: imageWidth,
-                      height: imageHeight,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: ColoredBox(
-                          color: isDark ? const Color(0xFF0C0C0C) : const Color(0xFFE4E7EA),
-                          child: Image.asset(
-                            imageAsset,
-                            fit: BoxFit.contain,
-                            alignment: Alignment.topCenter,
-                            errorBuilder: (context, error, stackTrace) =>
-                                ColoredBox(color: cs.surfaceContainerHigh),
+              child: Builder(
+                builder: (context) {
+                  final dpr = MediaQuery.devicePixelRatioOf(context);
+                  final decodeW = (imageWidth * dpr).round().clamp(1, 4096);
+                  final decodeH = (imageHeight * dpr).round().clamp(1, 4096);
+                  return Container(
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFF181818) : const Color(0xFFF2F4F5),
+                      borderRadius: BorderRadius.circular(radius),
+                      border: Border.all(color: cs.primary.withValues(alpha: 0.45)),
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip.hardEdge,
+                      children: [
+                        if (withDesktopBar)
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+                              child: SizedBox(height: 28, child: ColoredBox(color: cs.surfaceContainerHigh)),
+                            ),
+                          ),
+                        Positioned(
+                          left: imageLeft,
+                          top: imageTop,
+                          width: imageWidth,
+                          height: imageHeight,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: ColoredBox(
+                              color: isDark ? const Color(0xFF0C0C0C) : const Color(0xFFE4E7EA),
+                              child: Image.asset(
+                                imageAsset,
+                                fit: BoxFit.contain,
+                                alignment: Alignment.topCenter,
+                                cacheWidth: decodeW,
+                                cacheHeight: decodeH,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    ColoredBox(color: cs.surfaceContainerHigh),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Positioned(left: 10, bottom: 8, child: Text(title, style: codeStyle)),
+                      ],
                     ),
-                    Positioned(left: 10, bottom: 8, child: Text(title, style: codeStyle)),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ),
