@@ -1226,8 +1226,8 @@ class _AnimatedSolutionsSectionContentState extends State<AnimatedSolutionsSecti
                     spacing: 16,
                     runSpacing: 16,
                     children: [
-                      _floatedDevice(0, const DeviceFrame(title: 'Android 14', width: 190, height: 390, radius: 34, imageAsset: 'IMAGENS_APP/Screenshot/image_4a146e77.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120800.jpg', imageLeft: 27, imageTop: 22, imageWidth: 136, imageHeight: 342)),
-                      _floatedDevice(1, const DeviceFrame(title: 'iPhone 15 Pro', width: 190, height: 390, radius: 38, imageAsset: 'IMAGENS_APP/Screenshot/image_592a925d.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120808.jpg', imageLeft: 25, imageTop: 22, imageWidth: 140, imageHeight: 342)),
+                      _floatedDevice(0, const DeviceFrame(title: 'Android 14', width: 190, height: 338, radius: 34, imageAsset: 'IMAGENS_APP/Screenshot/image_4a146e77.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120800.jpg', imageLeft: 27, imageTop: 20, imageWidth: 136, imageHeight: 297)),
+                      _floatedDevice(1, const DeviceFrame(title: 'iPhone 15 Pro', width: 190, height: 338, radius: 38, imageAsset: 'IMAGENS_APP/Screenshot/image_592a925d.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120808.jpg', imageLeft: 25, imageTop: 20, imageWidth: 140, imageHeight: 297)),
                     ],
                   ),
                 );
@@ -1332,10 +1332,10 @@ class _PortfolioMotionBlockState extends State<PortfolioMotionBlock> with Single
               spacing: 10,
               runSpacing: 10,
               children: [
-                _demoChip(context, Icons.architecture, 'Clean Arch', 0),
-                _demoChip(context, Icons.security, 'Seguranca', 1),
-                _demoChip(context, Icons.trending_up, 'Escala', 2),
-                _demoChip(context, Icons.hub, 'Full-Stack', 3),
+                _demoChip(context, Icons.architecture, 'Clean Arch', 0, TecnologiasPage.topicCleanArch),
+                _demoChip(context, Icons.security, 'Seguranca', 1, TecnologiasPage.topicSeguranca),
+                _demoChip(context, Icons.trending_up, 'Escala', 2, TecnologiasPage.topicEscala),
+                _demoChip(context, Icons.hub, 'Full-Stack', 3, TecnologiasPage.topicFullStack),
               ],
             );
           },
@@ -1362,7 +1362,7 @@ class _PortfolioMotionBlockState extends State<PortfolioMotionBlock> with Single
     );
   }
 
-  Widget _demoChip(BuildContext context, IconData icon, String label, int index) {
+  Widget _demoChip(BuildContext context, IconData icon, String label, int index, String topicId) {
     final cs = Theme.of(context).colorScheme;
     final start = 0.35 + index * 0.12;
     final end = (start + 0.35).clamp(0.0, 1.0);
@@ -1371,9 +1371,14 @@ class _PortfolioMotionBlockState extends State<PortfolioMotionBlock> with Single
       opacity: v.clamp(0.0, 1.0),
       child: Transform.scale(
         scale: 0.85 + 0.15 * v,
-        child: Chip(
+        child: ActionChip(
           avatar: Icon(icon, size: 18, color: cs.primary),
           label: Text(label, style: const TextStyle(fontSize: 12)),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => TecnologiasPage(initialTopic: topicId),
+            ),
+          ),
           side: BorderSide(color: cs.outline),
           backgroundColor: cs.surface,
         ),
