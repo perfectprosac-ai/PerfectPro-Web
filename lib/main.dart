@@ -1,5 +1,6 @@
 ﻿import 'elastic_service.dart';
 import 'politica_page.dart';
+import 'tecnologias_page.dart';
 import 'web_cookie_consent_stub.dart' if (dart.library.html) 'web_cookie_consent_web.dart' as cookie_consent;
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
@@ -1338,6 +1339,24 @@ class _PortfolioMotionBlockState extends State<PortfolioMotionBlock> with Single
               ],
             );
           },
+        ),
+        const SizedBox(height: 14),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            ActionChip(
+              avatar: Icon(Icons.memory_rounded, size: 18, color: Theme.of(context).colorScheme.primary),
+              label: const Text('Parceiros tecnológicos'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const TecnologiasPage(),
+                ),
+              ),
+              side: BorderSide(color: Theme.of(context).colorScheme.outline),
+              backgroundColor: Theme.of(context).colorScheme.surface,
+            ),
+          ],
         ),
       ],
     );
