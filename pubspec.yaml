@@ -68,6 +68,8 @@ flutter:
     - assets/logo_PerfectPro_leve.webp
     - assets/logo_PerfectPro_leve_cropped.png
     - IMAGENS_APP/
+    - IMAGENS_APP/Screenshot/image_4a146e77.png
+    - IMAGENS_APP/Screenshot/image_592a925d.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
