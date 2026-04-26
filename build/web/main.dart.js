@@ -71746,7 +71746,7 @@ s.gta().lS(0)},
 $S:5}
 A.a8f.prototype={
 $2(a,b){var s=null,r=this.a
-return A.bk(s,s,A.r_(B.aU,A.c([r.HO(0,B.AL),r.HO(1,B.AK)],t.p),B.cr,16,16),!1,s,s,!1,s,s,s,s,s,"Vitrine de projetos em mockups de dispositivos",s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)},
+return A.bk(s,s,A.r_(B.aU,A.c([r.HO(0,B.AK),r.HO(1,B.AL)],t.p),B.cr,16,16),!1,s,s,!1,s,s,s,s,s,"Vitrine de projetos em mockups de dispositivos",s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)},
 $S:116}
 A.wS.prototype={
 a5(){return new A.NC(null,null)}}
@@ -75387,8 +75387,8 @@ B.d4=new A.qM(0,"clip")
 B.aH=new A.a77(0,"parent")
 B.Sw=new A.MR(null)
 B.AJ=new A.p8(B.jO,null,!0,B.d4,null,B.aH,null,B.Sw,null)
-B.AK=new A.uw("iPhone 15 Pro",38,"IMAGENS_APP/Screenshot/image_592a925d.png","IMAGENS_APP/Screenshot_20260423-120808.jpg",18,154,null)
-B.AL=new A.uw("Android 14",34,"IMAGENS_APP/Screenshot/image_4a146e77.png","IMAGENS_APP/Screenshot_20260423-120800.jpg",20,150,null)
+B.AK=new A.uw("Android 14",34,"IMAGENS_APP/Screenshot/image_4a146e77.png","IMAGENS_APP/Screenshot_20260423-120800.jpg",27,136,null)
+B.AL=new A.uw("iPhone 15 Pro",38,"IMAGENS_APP/Screenshot/image_592a925d.png","IMAGENS_APP/Screenshot_20260423-120808.jpg",25,140,null)
 B.AM=new A.ux(0)
 B.ar=new A.uy(3,"info")
 B.AN=new A.uy(5,"hint")

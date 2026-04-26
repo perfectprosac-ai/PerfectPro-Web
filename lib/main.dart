@@ -1225,8 +1225,8 @@ class _AnimatedSolutionsSectionContentState extends State<AnimatedSolutionsSecti
                     spacing: 16,
                     runSpacing: 16,
                     children: [
-                      _floatedDevice(0, const DeviceFrame(title: 'Android 14', width: 190, height: 390, radius: 34, imageAsset: 'IMAGENS_APP/Screenshot/image_4a146e77.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120800.jpg', imageLeft: 20, imageTop: 22, imageWidth: 150, imageHeight: 342)),
-                      _floatedDevice(1, const DeviceFrame(title: 'iPhone 15 Pro', width: 190, height: 390, radius: 38, imageAsset: 'IMAGENS_APP/Screenshot/image_592a925d.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120808.jpg', imageLeft: 18, imageTop: 22, imageWidth: 154, imageHeight: 342)),
+                      _floatedDevice(0, const DeviceFrame(title: 'Android 14', width: 190, height: 390, radius: 34, imageAsset: 'IMAGENS_APP/Screenshot/image_4a146e77.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120800.jpg', imageLeft: 27, imageTop: 22, imageWidth: 136, imageHeight: 342)),
+                      _floatedDevice(1, const DeviceFrame(title: 'iPhone 15 Pro', width: 190, height: 390, radius: 38, imageAsset: 'IMAGENS_APP/Screenshot/image_592a925d.png', fallbackImageAsset: 'IMAGENS_APP/Screenshot_20260423-120808.jpg', imageLeft: 25, imageTop: 22, imageWidth: 140, imageHeight: 342)),
                     ],
                   ),
                 );
